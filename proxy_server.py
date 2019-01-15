@@ -6,14 +6,15 @@ HOST = ""
 PORT = 8081
 BUFFER_SIZE = 1024
 
+addr_info=socket.getaddrinfo("www.google.com",80, proto=socket.SOL_TCP)
+(family,socktype, proto, canonname, sockaddr) = addr_info[0]
+ 
 def main():
-    addr_info=socket.getaddrinfo(HOST,PORT, proto=socket.SOL_TCP)
-    (family,socktype,proto,cannonname, sockaddr) = addr_tup[0]
-
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+   with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.bind((HOST, PORT))
-        s.listen(1)
         s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        s.listen(1)
+        
         while True:
             conn, addr = s.accept()
             with conn:
@@ -29,7 +30,7 @@ def main():
                         data = conn.recv(BUFFER_SIZE)
                         if not data:
                             break
-                        full_data +=data
+                        send_full_data +=data
 
                     proxy_end.sendall(send_full_data)
 

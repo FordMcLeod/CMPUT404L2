@@ -29,7 +29,6 @@ def conn_socket(addr_tup):
             if not data:
                 break
             full_data+= data
-        print(full_data)
     except e: 
         print(e)
     finally:
@@ -38,7 +37,10 @@ def conn_socket(addr_tup):
 def main():
     addr_info=socket.getaddrinfo(HOST,PORT, proto=socket.SOL_TCP)
     for addr_tup in addr_info:
-        conn_socket(addr_tup)
+        with Pool() as p:
+            p.map(conn_socket, [addr_tup for _ in range(1,50)])
+
+        #conn_socket(addr_tup)
         break
 
 if __name__ == "__main__":
